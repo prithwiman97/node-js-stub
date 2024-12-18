@@ -17,8 +17,7 @@ app.post("/", (req, res) => {
   for (let key in formData) {
     queryParams.push(key + "=" + encodeURIComponent(formData[key]));
   }
-  console.log(queryParams.join("&"));
-  res.redirect(`https://php-stub.free.nf?${queryParams}`);
+  res.redirect(`https://php-stub.free.nf?${queryParams.join("&")}`);
 });
 app.get("/", (req, res) => {
   res.send("Hello from Vercel Node.js app");
