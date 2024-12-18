@@ -1,0 +1,20 @@
+{
+  "name": "node-js-stub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Prithwiman Mazumdar",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.0.0-beta.2",
+    "express-router": "^0.0.1"
+  }
+}
