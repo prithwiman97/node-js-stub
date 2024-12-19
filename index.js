@@ -16,7 +16,9 @@ app.post("/", (req, res) => {
   console.log(formData);
   const queryString = querystring.stringify(formData);
   console.log(queryString);
-  res.redirect(`https://php-stub.free.nf?${queryString}`);
+  const redirectUrl = `https://php-stub.free.nf?${queryString}`;
+  console.log(`Redirect url = ${redirectUrl}`);
+  res.redirect(redirectUrl);
 });
 app.get("/", (req, res) => {
   res.send("Hello from Vercel Node.js app");
