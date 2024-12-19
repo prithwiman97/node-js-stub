@@ -15,11 +15,11 @@ app.post("/", (req, res) => {
   console.log(formData);
   let queryParams = [];
   for (let key in formData) {
-    queryParams.push(key + "=" + encodeURIComponent(formData[key]));
+    queryParams.push(key + "=" + formData[key]);
   }
   const querystring = queryParams.join("&");
   console.log(querystring);
-  res.redirect(`https://php-stub.free.nf?${querystring}`);
+  res.redirect(`https://php-stub.free.nf?${encodeURIComponent(querystring)}`);
 });
 app.get("/", (req, res) => {
   res.send("Hello from Vercel Node.js app");
