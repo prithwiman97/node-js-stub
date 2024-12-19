@@ -1,5 +1,6 @@
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const querystring = require("querystring");
 const express = require("express");
 const app = express();
 
@@ -13,13 +14,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post("/", (req, res) => {
   const formData = req.body;
   console.log(formData);
-  let queryParams = [];
-  for (let key in formData) {
-    queryParams.push(key + "=" + formData[key]);
-  }
-  const querystring = queryParams.join("&");
-  console.log(querystring);
-  res.redirect(`https://php-stub.free.nf?${encodeURIComponent(querystring)}`);
+  const queryString = querystring.stringify(formData);
+  console.log(queryString);
+  res.redirect(`https://php-stub.free.nf?${encodeURIComponent(queryString)}`);
 });
 app.get("/", (req, res) => {
   res.send("Hello from Vercel Node.js app");
