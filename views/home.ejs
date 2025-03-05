@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<hmtl>
+    <head>
+        <title>Process Request Form</title>
+    </head>
+    <body>
+        <table>
+            <tbody>
+                <% 
+                    for (let key in data) {
+                %>
+                <tr>
+                    <td><%= key %></td>
+                    <td>
+                        <input type="text" id="<%= key %>" value="<%= data[key] %>" style="width: 40rem" readonly />
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+            </tbody>
+        </table>
+        <hr>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Return URL Field Name</td>
+                    <td>
+                        <input type="text" id="ret_url_field_name" name="ret_url_field_name" />
+                    </td>
+                </tr>
+                <form id="form" action="/process-request">
+                <tr>
+                    <td>Secret key</td>
+                    <td>
+                        <input type="text" id="secret_key" name="secret_key" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Signature Field Name</td>
+                    <td>
+                        <input type="text" id="signature_field_name" name="signature_field_name" />
+                    </td>
+                </tr>
+                <tr>
+                        <script>
+                            const formToBeSubmitted = document.getElementById("form");
+                            const isNullOrEmpty = (value) => (!value || value === "");
+                            const getReturnUrl = () => {
+                                let returnUrlFieldName = document.getElementById("ret_url_field_name").value;
+                                returnUrlFieldName = !isNullOrEmpty(returnUrlFieldName) ? returnUrlFieldName : "return_url";
+                                const returnUrl = document.getElementById(returnUrlFieldName);
+                                return returnUrl.value;
+                            }
+                            const addReturnUrlFieldToForm = () => {
+                                const returnUrlHiddenInput = document.createElement("input");
+                                returnUrlHiddenInput.type = "hidden";
+                                returnUrlHiddenInput.name = "return_url";
+                                returnUrlHiddenInput.value = getReturnUrl();
+                                formToBeSubmitted.appendChild(returnUrlHiddenInput);
+                            }
+                            const submitFormByPost = () => {
+                                addReturnUrlFieldToForm();
+                                formToBeSubmitted.method = "POST";
+                                formToBeSubmitted.submit();
+                            }
+                            const submitFormByGet = () => {
+                                addReturnUrlFieldToForm();
+                                formToBeSubmitted.method = "GET";
+                                formToBeSubmitted.submit();
+                            }
+                        </script>
+                        <td>Return Parameters:</td>
+                        <td>
+                            <textarea name="return_params" cols=40 rows=5></textarea>
+                        </td>
+                    </tr>
+                </form>
+            </tbody>
+        </table>
+        <button onclick="submitFormByGet();">Pass via Query String</button>
+        <button onclick="submitFormByPost();">Pass via Form Post</button>
+    </body>
+</html>

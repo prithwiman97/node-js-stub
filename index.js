@@ -1,8 +1,14 @@
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const querystring = require("querystring");
 const express = require("express");
+const path = require('path');
 const app = express();
+
+const homeController = require("./controllers/home");
+const transactionController = require("./controllers/process-request");
+
+app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(
   cors({
@@ -10,19 +16,13 @@ app.use(
     methods: ["GET", "POST"],
   })
 );
+
 app.use(bodyParser.urlencoded({ extended: true }));
-app.post("/", (req, res) => {
-  const formData = req.body;
-  console.log(formData);
-  const queryString = querystring.stringify(formData);
-  console.log(queryString);
-  const redirectUrl = `https://php-stub.free.nf?${queryString}`;
-  console.log(`Redirect url = ${redirectUrl}`);
-  res.redirect(redirectUrl);
-});
-app.get("/", (req, res) => {
-  res.send("Hello from Vercel Node.js app");
-});
+
+app.post("/process-request", transactionController.processRequestPOST);
+app.post("/", homeController.showFormPOST);
+app.get("/process-request", transactionController.processRequestGET);
+app.get("/", homeController.showFormGET);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => {

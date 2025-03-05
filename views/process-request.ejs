@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <body>
+    <%
+        let returnUrl = formData["return_url"];
+        const returnParams = formData["return_params"];
+        const secretKey = formData["secret_key"] || "";
+        const signatureFieldName = isNullOrEmpty(formData["signature_field_name"]) ? "signature" : formData["signature_field_name"];
+        let signature = "";
+        let hashInput = "";
+
+        // if secret is provided then calculate signature using SHA256
+        if (secretKey !== "") {
+            hashInput = returnParams.replaceAll(",","");
+            console.log("Hash Input = " + hashInput);
+            signature = hashHmac(secretKey, hashInput, "sha256");
+            console.log("Signature = " + signature);
+        }
+
+        // get key value pairs from return parameters
+        const keyValuePairs = returnParams.split(",");
+        if (method === "POST") {
+    %>
+        <form id="form" action="<%= returnUrl %>" method="POST">
+        <%
+            // iterate over key value pairs in form key=value and add them to form in case method is POST
+            for (let kvp of keyValuePairs) {
+                const kvpArray = kvp.split("=");
+                const key = kvpArray[0];
+                const value = kvpArray[1];
+        %>
+            <input type="hidden" name="<%= key %>" value="<%= value %>" />
+        <%
+            }
+
+            // if secret is provided then add calculated signature to form hidden fields
+            if (secretKey !== "") {
+        %>
+            <input type="hidden" name="<%= signatureFieldName %>" value="<%= signature %>" />    
+        <%
+            }
+        %>
+        </form>
+        <script>
+            document.getElementById("form").submit();
+        </script>
+    <%
+        }
+    %>
+    </body>
+</html>
