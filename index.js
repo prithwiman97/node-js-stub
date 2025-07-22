@@ -6,6 +6,7 @@ const app = express();
 
 const homeController = require("./controllers/home");
 const transactionController = require("./controllers/process-request");
+const refundController = require("./controllers/process-refund");
 
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'views'));
@@ -20,6 +21,7 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/process-request", transactionController.processRequestPOST);
+app.post("/process-refund", refundController.processRefundPOST);
 app.post("/", homeController.showFormPOST);
 app.get("/process-request", transactionController.processRequestGET);
 app.get("/", homeController.showFormGET);
