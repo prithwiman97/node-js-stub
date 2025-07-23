@@ -13,7 +13,7 @@ const processRefundRequest = (requestObj) => {
     const responseData = {
         [responseMapping[ResponseFields.UNIQUE_ID]]: requestData[RequestFields.UNIQUE_ID],
         [responseMapping[ResponseFields.REFUNDED_AMOUNT]]: requestData[RequestFields.REFUND_AMOUNT],
-        [responseMapping[ResponseFields.REFUND_TRANS_ID]]: requestData[RequestFields.TRANS_ID].toString() + "123",
+        [responseMapping[ResponseFields.REFUND_TRANS_ID]]: requestData[RequestFields.TRANS_ID]?.toString() + "123",
         [responseMapping[ResponseFields.STATUS]]: "Success",
         [responseMapping[ResponseFields.ERROR_MESSAGE]]: "",
     };
@@ -37,7 +37,7 @@ const processRefundRequest = (requestObj) => {
 }
 
 exports.processRefundPOST = async (req, res) => {
-    const data = req.body;
+    const data = req.query;
     const responseData = processRefundRequest(data);
     res.json(responseData);
 }
