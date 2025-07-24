@@ -14,7 +14,7 @@ const processRefundRequest = (requestObj) => {
         [responseMapping[ResponseFields.UNIQUE_ID]]: requestData[RequestFields.UNIQUE_ID],
         [responseMapping[ResponseFields.REFUNDED_AMOUNT]]: requestData[RequestFields.REFUND_AMOUNT],
         [responseMapping[ResponseFields.REFUND_TRANS_ID]]: requestData[RequestFields.TRANS_ID]?.toString() + "123",
-        [responseMapping[ResponseFields.STATUS]]: "Success",
+        [responseMapping[ResponseFields.STATUS]]: "200",
         [responseMapping[ResponseFields.ERROR_MESSAGE]]: "",
     };
 
