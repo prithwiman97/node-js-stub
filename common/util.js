@@ -15,7 +15,7 @@ exports.hashHmac = (key, data, algorithm = 'sha256') => {
 
 exports.getRequestMapping = () => {
     return {
-        unique_id: RequestFields.UNIQUE_ID,
+        uid: RequestFields.UNIQUE_ID,
         refund_amount: RequestFields.REFUND_AMOUNT,
         reason: RequestFields.REASON,
         transaction_id: RequestFields.TRANS_ID,
@@ -27,7 +27,7 @@ exports.getResponseMapping = () => {
         [ResponseFields.UNIQUE_ID]: "unique_id",
         [ResponseFields.REFUNDED_AMOUNT]: "refunded_amount",
         [ResponseFields.REFUND_TRANS_ID]: "refund_transaction_id",
-        [ResponseFields.STATUS]: "status",
+        [ResponseFields.STATUS]: "refund_status",
         [ResponseFields.ERROR_MESSAGE]: "error_msg",
         [ResponseFields.SIGNATURE]: "signature",
     }
@@ -35,4 +35,26 @@ exports.getResponseMapping = () => {
 
 exports.getSecretKey = () => {
     return "testkey";
+}
+
+exports.determineResponseStatus = (amount) => {
+    if (typeof amount === 'string') {
+        amount = parseFloat(amount);
+    }
+    if (amount % 9 === 0) {
+        return {
+            status: "Failure",
+            errorMessage: "Refund transaction failed.",
+        };
+    }
+    if (amount % 11 === 0) {
+        return {
+            status: "Pending",
+            errorMessage: "",
+        };
+    }
+    return {
+        status: "200",
+        errorMessage: "",
+    };
 }

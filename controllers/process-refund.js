@@ -1,5 +1,5 @@
 const { RequestFields, ResponseFields } = require("../common/constants.js");
-const { hashHmac, getRequestMapping, getResponseMapping, getSecretKey } = require("../common/util.js");
+const { hashHmac, getRequestMapping, getResponseMapping, getSecretKey, determineResponseStatus } = require("../common/util.js");
 
 const processRefundRequest = (requestObj) => {
     const requestMapping = getRequestMapping();
@@ -9,13 +9,14 @@ const processRefundRequest = (requestObj) => {
     }
 
     const responseMapping = getResponseMapping();
-
+    const { status, errorMessage } = determineResponseStatus(requestData[RequestFields.REFUND_AMOUNT]);
+    
     const responseData = {
         [responseMapping[ResponseFields.UNIQUE_ID]]: requestData[RequestFields.UNIQUE_ID],
         [responseMapping[ResponseFields.REFUNDED_AMOUNT]]: requestData[RequestFields.REFUND_AMOUNT],
         [responseMapping[ResponseFields.REFUND_TRANS_ID]]: requestData[RequestFields.TRANS_ID]?.toString() + "123",
-        [responseMapping[ResponseFields.STATUS]]: "200",
-        [responseMapping[ResponseFields.ERROR_MESSAGE]]: "",
+        [responseMapping[ResponseFields.STATUS]]: status,
+        [responseMapping[ResponseFields.ERROR_MESSAGE]]: errorMessage,
     };
 
     console.log("Refund Response = ", responseData);
